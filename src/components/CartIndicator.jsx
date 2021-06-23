@@ -1,8 +1,11 @@
+import { Component } from 'react'
 import Button from "react-bootstrap/Button";
 import { withRouter } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 
 import { connect } from 'react-redux'
+import { FormControl } from "react-bootstrap";
+import { setUsernameAction } from '../actions';
 
 // const mapStateToProps = (state) => state
 // mapStateToProps is a function returning an object
@@ -22,13 +25,46 @@ const mapStateToProps = state => {
   return state
 }
 
-const CartIndicator = (props) => (
-  <div className="ml-auto mt-2">
-    <Button color="primary" onClick={() => props.history.push("/cart")}>
-      <FaShoppingCart />
-      <span className="ml-2">{props.cart.products.length}</span>
-    </Button>
-  </div>
-);
+const mapDispatchToProps = dispatch => ({
+  setUsername: (name) => {
+    dispatch(setUsernameAction(name))
+  }
+})
 
-export default connect(mapStateToProps)(withRouter(CartIndicator));
+class CartIndicator extends Component {
+
+  state = {
+    username: ''
+  }
+
+  render() {
+    return (
+      <div className="ml-auto mt-2">
+        {
+          this.props.user.firstName ?
+            <Button color="primary" onClick={() => this.props.history.push("/cart")}>
+              <span>Welcome, {this.props.user.firstName}!</span>
+              <FaShoppingCart className="ml-2" />
+              <span className="ml-2">{this.props.cart.products.length}</span>
+            </Button>
+            :
+            <FormControl
+              type="text"
+              placeholder="your name?"
+              value={this.state.username}
+              onChange={(e) => {
+                this.setState({ username: e.target.value })
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  // dispatch the action!
+                  this.props.setUsername(this.state.username)
+                }
+              }}
+            />
+        }
+      </div>)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CartIndicator));

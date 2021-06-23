@@ -7,6 +7,9 @@ export const initialState = {
   cart: {
     products: [],
   },
+  user: {
+    firstName: '',
+  },
 }
 
 const configureStore = () =>
