@@ -24,7 +24,6 @@ const mapStateToProps = state => {
 
 const CartIndicator = (props) => (
   <div className="ml-auto mt-2">
-    {console.log(props)}
     <Button color="primary" onClick={() => props.history.push("/cart")}>
       <FaShoppingCart />
       <span className="ml-2">{props.cart.products.length}</span>
